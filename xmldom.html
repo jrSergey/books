@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Работа с XML</title>
+    
+    <style>
+        /*Добавление чередующих цветов фона в списке*/
+        li:nth-child( even ) { background: LightSalmon; }
+    </style>
+
+</head>
+
+<body>
+    
+    <button onclick="loadXML( )">Get Books</button>
+    <ol id="list"></ol>
+
+    <script>
+
+        //Функция для обработки запроса данных XML
+        function loadXML( ) 
+        {
+            const xmlhttp = new XMLHttpRequest( )
+            xmlhttp.open( 'GET', 'books.xml', true )
+            xmlhttp.send( )
+            xmlhttp.onreadystatechange = function( ) 
+            {
+                if( this.readyState == 4 && this.status == 200 )
+                getData ( this )
+            }
+        }
+
+        //Функция для обработки ответа и записи XML-данных в пустой элемент списка
+        function getData( xml ) 
+        {
+            const xmlDoc = xml.responseXML
+            const tags = xmlDoc.getElementsByTagName( 'book' )
+            let list = '', i = 0
+            for( i = 0; i < tags.length; i++ )
+            {
+                list = list + '<li>' + tags[ i ].getElementsByTagName( 'title' )[ 0 ].firstChild.data
+            }
+            document.getElementById( 'list' ).innerHTML = list
+        }
+
+    </script>
+
+</body>
+</html>
